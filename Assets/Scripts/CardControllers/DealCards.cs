@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
@@ -8,21 +9,10 @@ namespace CardControllers
     {
         private int cardsToDeal;
         [SerializeField] private GameObject cardPrefab;
-        public CardsDealt cardsDealt;
-
-        private void Awake()
-        {
-            cardsDealt = this.GetComponent<CardsDealt>();
-        }
-
-        private void Start()
-        {
-            CalculateCardsQuantity();
-        }
 
         private void CalculateCardsQuantity()
         {
-            cardsToDeal = GameSetup.Instance.playersInGame switch
+            cardsToDeal = GameSetup.Instance.PlayersInGame switch
             {
                 2 => 10,
                 3 => 9,
@@ -34,34 +24,36 @@ namespace CardControllers
 
         private void SetHand()
         {
-            for (var i = 0; i < cardsToDeal; i++)
+            foreach (var player in GameSetup.Instance.players)
             {
-                var card = CardsDeck.Deck[Random.Range(0, CardsDeck.Deck.Count)];
-                switch (CardsDeck.ContainsCardOnDeck(card))
+                for (var i = 0; i < cardsToDeal; i++)
                 {
-                    case true:
-                        cardsDealt.currentCards.Add(card);
-                        CardsDeck.RemoveCardFromDeck(card);
-                        break;
-                    case false:
-                        return;
+                    var card = CardsDeck.Deck[Random.Range(0, CardsDeck.Deck.Count)];
+                    switch (CardsDeck.ContainsCardOnDeck(card))
+                    {
+                        case true:
+                            player.currentCards.Add(card);
+                            CardsDeck.RemoveCardFromDeck(card);
+                            
+                            ShowCardInHand(player,card);
+                            break;
+                        case false:
+                            return;
+                    }
                 }
             }
         }
 
-        private void ShowCardsInHand()
+        private void ShowCardInHand(Component player, Card card)
         {
-            foreach (var card in cardsDealt.currentCards)
-            {
+                Instantiate(cardPrefab, player.transform);
                 cardPrefab.GetComponent<CardDisplay>().card = card;
-                Instantiate(cardPrefab, this.transform);
-            }
         }
 
         public void Deal()
         {
+            CalculateCardsQuantity();
             SetHand();
-            ShowCardsInHand();
         }
     }
 }

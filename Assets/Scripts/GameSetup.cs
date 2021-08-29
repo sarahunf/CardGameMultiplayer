@@ -1,15 +1,17 @@
 using System;
 using System.Collections.Generic;
 using CardControllers;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 
 public class GameSetup : MonoBehaviour
 {
     public static GameSetup Instance { get; private set; }
-    [SerializeField] internal int playersInGame = 2;
+    internal int PlayersInGame;
     public Card[] cards;
-    private List<Player> Players;
+    public List<Player> players;
 
     private void Awake()
     {
@@ -21,16 +23,17 @@ public class GameSetup : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(this.gameObject);
-        
+
         CardsDeck.SetCurrentDeckInGame(cards);
     }
 
     private void Start()
     {
-        var players = FindObjectsOfType<Player>();
-        foreach (var player in players)
+        var playersInScene = FindObjectsOfType<Player>();
+        foreach (var player in playersInScene)
         {
-            Players.Add(player);
+            players.Add(player);
         }
+        PlayersInGame = players.Count;
     }
 }
