@@ -10,10 +10,8 @@ namespace CardControllers
         public void Reset()
         {
             //check if cards have been dealt
-            
             ResetLogic();
             ResetUI();
-            CardsDeck.ShowCurrentCardsOnDeck();
         }
 
         private void ResetLogic()

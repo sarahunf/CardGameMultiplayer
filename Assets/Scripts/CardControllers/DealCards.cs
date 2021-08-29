@@ -24,7 +24,7 @@ namespace CardControllers
 
         private void SetHand()
         {
-            foreach (var player in GameSetup.Instance.players)
+            foreach (var player in GameSetup.Instance.players.Where(player => player.currentCards.Count == 0))
             {
                 for (var i = 0; i < cardsToDeal; i++)
                 {
@@ -34,8 +34,8 @@ namespace CardControllers
                         case true:
                             player.currentCards.Add(card);
                             CardsDeck.RemoveCardFromDeck(card);
-                            
-                            ShowCardInHand(player,card);
+
+                            ShowCardInHand(player, card);
                             break;
                         case false:
                             return;
@@ -46,8 +46,8 @@ namespace CardControllers
 
         private void ShowCardInHand(Component player, Card card)
         {
-                Instantiate(cardPrefab, player.transform);
-                cardPrefab.GetComponent<CardDisplay>().card = card;
+            Instantiate(cardPrefab, player.transform);
+            cardPrefab.GetComponent<CardDisplay>().card = card;
         }
 
         public void Deal()
