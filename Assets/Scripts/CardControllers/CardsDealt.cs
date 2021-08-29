@@ -4,9 +4,9 @@ using UnityEngine.Serialization;
 
 namespace CardControllers
 {
-    public class CardsDealt : MonoBehaviour
+    public abstract class CardsDealt : MonoBehaviour
     {
-       public  List<Card> currentCards =  new List<Card>();
+       public List<Card> currentCards =  new List<Card>();
     }
 }
 
