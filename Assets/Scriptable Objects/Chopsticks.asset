@@ -14,9 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Chopsticks
   description: Swap for 2
-  artwork: {fileID: 0}
+  artwork: {fileID: 21300000, guid: 71a571f6e451fb0469142c56a535b347, type: 3}
   quantity: 1
   color: {r: 0.6431373, g: 0.8705883, b: 0.7843138, a: 1}
   power: 02000000
   maxQuantityInGame: 4
-  dealtInGame: 2
