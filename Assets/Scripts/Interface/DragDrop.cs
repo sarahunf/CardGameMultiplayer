@@ -8,6 +8,8 @@ namespace Interface
         [SerializeField] private Canvas canvas;
         private RectTransform rectTransform;
         private CanvasGroup canvasGroup;
+        internal Vector3 originalPos;
+
         private void Awake()
         {
             canvas = GameSetup.Instance.gameObject.GetComponent<Canvas>();
@@ -17,6 +19,7 @@ namespace Interface
 
         public void OnBeginDrag(PointerEventData eventData)
         {
+            originalPos = gameObject.transform.position;
             canvasGroup.blocksRaycasts = false;
             canvasGroup.alpha = .6f;
         }
@@ -35,6 +38,5 @@ namespace Interface
         public void OnPointerDown(PointerEventData eventData)
         {
         }
-
     }
 }
