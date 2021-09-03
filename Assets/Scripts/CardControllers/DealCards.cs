@@ -24,7 +24,7 @@ namespace CardControllers
 
         private void SetHand()
         {
-            foreach (var player in GameSetup.Instance.players.Where(player => player.currentCards.Count == 0))
+            foreach (var player in GameSetup.Instance.players.Where(player => player.currentCardsInHand.Count == 0))
             {
                 for (var i = 0; i < cardsToDeal; i++)
                 {
@@ -32,7 +32,7 @@ namespace CardControllers
                     switch (CardsDeck.ContainsCardOnDeck(card))
                     {
                         case true:
-                            player.currentCards.Add(card);
+                            player.currentCardsInHand.Add(card);
                             CardsDeck.RemoveCardFromDeck(card);
 
                             ShowCardInHand(player, card);

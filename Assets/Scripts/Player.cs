@@ -4,8 +4,12 @@ using System.Runtime.CompilerServices;
 using CardControllers;
 using UnityEngine;
 
-public class Player:  CardsDealt
+public class Player:  CardsInTurn
 {
-   
-    //add dealt cards to player. Use it on dealcards and resetcards to manage card for every player
+    //player ID used x card on this turn
+    //use drag and drop events maybe
+    //remember the player knows which cards he gets, not the other way around
+    
+    //set lists for every type of card here and score accordingly
+    //use rules to set rules and scoring for player
 }
