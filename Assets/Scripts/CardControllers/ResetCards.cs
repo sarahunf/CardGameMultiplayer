@@ -17,10 +17,10 @@ namespace CardControllers
         private void ResetLogic()
         {
             
-            var handsDealt = FindObjectsOfType<CardsDealt>();
+            var handsDealt = FindObjectsOfType<CardsInTurn>();
             foreach (var hand in handsDealt)
             {
-                hand.currentCards.Clear();
+                hand.currentCardsInHand.Clear();
             }
         }
 

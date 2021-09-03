@@ -6,12 +6,13 @@ namespace CardControllers
     [CreateAssetMenu(menuName = "Card", order = 1)]
     public class Card : ScriptableObject
     {
-        [SerializeField] private new string name;
+        public new string name;
         public string description;
         public Sprite artwork;
         public int quantity;
         public Color color;
-        public int[] power;
+        public int maxValue;
+        public int minValue;
         public int maxQuantityInGame;
     }
 }

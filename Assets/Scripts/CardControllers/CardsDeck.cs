@@ -1,19 +1,19 @@
 using System.Collections.Generic;
-using System.Linq;
-using TMPro;
 using UnityEngine;
 
 namespace CardControllers
 {
     public struct CardsDeck
     {
+         public static List<Card> Cards { get; private set; }
          public static List<Card> Deck { get; private set; }
-
+ 
         private CardsDeck(Card[] cards)
         {
             Deck = new List<Card>();
             foreach (var card in cards)
             {
+                //Cards.Add(card);
                 for (var i = 0; i < card.maxQuantityInGame; i++)
                     Deck.Add(card);
             }
