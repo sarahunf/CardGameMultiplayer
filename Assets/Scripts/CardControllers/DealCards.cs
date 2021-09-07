@@ -1,7 +1,8 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Serialization;
-using Random = UnityEngine.Random;
+using UnityEngine.Events;
 
 namespace CardControllers
 {
@@ -10,9 +11,14 @@ namespace CardControllers
         private int cardsToDeal;
         [SerializeField] private GameObject cardPrefab;
 
-        private void CalculateCardsQuantity()
+        private void Start()
         {
-            cardsToDeal = GameSetup.Instance.PlayersInGame switch
+           GameManager.Instance.dealButton.onClick.AddListener(Deal);
+        }
+
+        internal int CalculateCardsQuantity()
+        {
+            cardsToDeal = GameManager.Instance.PlayersInGame switch
             {
                 2 => 10,
                 3 => 9,
@@ -20,37 +26,35 @@ namespace CardControllers
                 5 => 7,
                 _ => 10
             };
+            return cardsToDeal;
         }
 
+        //está instanciando uma ultima carta errada sempre
         private void SetHand()
         {
-            foreach (var player in GameSetup.Instance.players.Where(player => player.currentCardsInHand.Count == 0))
+            CardsDeck.ShuffleDeck();
+            foreach (var player in GameManager.Instance.players.Where(player => player.currentCardsInHand.Count == 0))
             {
                 for (var i = 0; i < cardsToDeal; i++)
                 {
-                    var card = CardsDeck.Deck[Random.Range(0, CardsDeck.Deck.Count)];
-                    switch (CardsDeck.ContainsCardOnDeck(card))
-                    {
-                        case true:
-                            player.currentCardsInHand.Add(card);
-                            CardsDeck.RemoveCardFromDeck(card);
-
-                            ShowCardInHand(player, card);
-                            break;
-                        case false:
-                            return;
-                    }
+                    var card = CardsDeck.Deck[0];
+                    player.currentCardsInHand.Add(card);
+                    CardsDeck.RemoveCardFromDeck(card);
                 }
+                ShowCardInHand(player, player.currentCardsInHand);
             }
         }
 
-        private void ShowCardInHand(Component player, Card card)
+        public void ShowCardInHand(Player player, List<Card> hand)
         {
-            Instantiate(cardPrefab, player.transform);
-            cardPrefab.GetComponent<CardDisplay>().card = card;
+            foreach (var card in hand)
+            {
+                cardPrefab.GetComponent<CardDisplay>().card = card;
+                Instantiate(cardPrefab, player.transform);
+            }
         }
 
-        public void Deal()
+        internal void Deal()
         {
             CalculateCardsQuantity();
             SetHand();

@@ -15,9 +15,8 @@ namespace CardControllers
         [SerializeField] private Transform quantityParent;
         [SerializeField] private Image background;
 
-        private void Awake()
+        private void OnEnable()
         {
-            //show all card references
             nameText.text = card.name;
             descriptionText.text = card.description;
             background.color = card.color;

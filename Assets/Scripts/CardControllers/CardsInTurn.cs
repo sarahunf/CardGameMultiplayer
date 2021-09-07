@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 namespace CardControllers
 {
@@ -9,7 +10,11 @@ namespace CardControllers
        public List<Card> currentCardsInHand =  new List<Card>();
        public List<Card> cardsUsedInTurn = new List<Card>();
        public List<Card> cardsUsedInGame = new List<Card>();
-       public Card lastUsed;
+       public List<Card> cardsUsedOnTable = new List<Card>();
+       public Card lastUsedCard;
+       public Button useChopstick;
+       public Button showCardsOnHand;
+       public Button showCardsOnTable;
     }
 }
 

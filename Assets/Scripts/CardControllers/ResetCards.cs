@@ -1,12 +1,16 @@
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Serialization;
 
 namespace CardControllers
 {
     public class ResetCards : MonoBehaviour
     {
-        //working, but poor logic and performance. Check a better way later
+        private void Start()
+        {
+            GameManager.Instance.resetButton.onClick.AddListener(Reset);
+        }
         public void Reset()
         {
             //check if cards have been dealt
@@ -24,7 +28,7 @@ namespace CardControllers
             }
         }
 
-        private void ResetUI()
+        internal void ResetUI()
         {
             var cardDisplay = FindObjectsOfType<CardDisplay>();
             foreach (var card in cardDisplay)

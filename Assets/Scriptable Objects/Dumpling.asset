@@ -17,5 +17,7 @@ MonoBehaviour:
   artwork: {fileID: 21300000, guid: ffcf215ade065c14db7a2319b4c5b9c4, type: 3}
   quantity: 1
   color: {r: 0.4431373, g: 0.5803922, b: 0.83921576, a: 1}
-  power: 0100000003000000060000000a0000000f000000
+  maxValue: 15
+  minValue: 0
   maxQuantityInGame: 14
+  turnsInGame: 0

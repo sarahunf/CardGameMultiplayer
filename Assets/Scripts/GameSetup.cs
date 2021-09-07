@@ -9,9 +9,7 @@ using UnityEngine.Serialization;
 public class GameSetup : MonoBehaviour
 {
     public static GameSetup Instance { get; private set; }
-    internal int PlayersInGame;
     public Card[] cards;
-    public List<Player> players;
 
     private void Awake()
     {
@@ -25,15 +23,5 @@ public class GameSetup : MonoBehaviour
         DontDestroyOnLoad(this.gameObject);
 
         CardsDeck.SetCurrentDeckInGame(cards);
-    }
-
-    private void Start()
-    {
-        var playersInScene = FindObjectsOfType<Player>();
-        foreach (var player in playersInScene)
-        {
-            players.Add(player);
-        }
-        PlayersInGame = players.Count;
     }
 }

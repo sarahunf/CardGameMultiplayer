@@ -12,7 +12,7 @@ namespace Interface
 
         private void Awake()
         {
-            canvas = GameSetup.Instance.gameObject.GetComponent<Canvas>();
+            canvas = GameManager.Instance.canvas;
             rectTransform = GetComponent<RectTransform>();
             canvasGroup = GetComponent<CanvasGroup>();
         }
