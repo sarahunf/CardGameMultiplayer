@@ -17,14 +17,24 @@ public class GameManager : MonoBehaviour
     [SerializeField] internal Button resetButton;
     [SerializeField] internal Button compareButton;
     [SerializeField] internal Button finishTurnButton;
-    [SerializeField] internal Button useChopsticks;
+
+    public UnityEvent CallEndTurn;
+    public UnityEvent CallExchangeCards;
+
+    public Transform playersParent;
     public List<Player> players;
-    internal int PlayersInGame;
+    [SerializeField] internal int PlayersInGame;
+
     internal int round;
     internal int lastRound;
     private int handsChange;
+
     [SerializeField] internal Card chopsticks;
     [SerializeField] internal Card wasabi;
+    internal Player activePlayer;
+
+    internal ResetCards reseter;
+    private DealCards dealer;
 
     private void Awake()
     {
@@ -40,14 +50,19 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        var playersInScene = FindObjectsOfType<Player>();
+        reseter = this.GetComponent<ResetCards>();
+        dealer = this.GetComponent<DealCards>();
+        var playersInScene = playersParent.GetComponentsInChildren<Player>(true);
         foreach (var player in playersInScene)
         {
             players.Add(player);
         }
 
         PlayersInGame = players.Count;
+        activePlayer = playersInScene[0];
         finishTurnButton.onClick.AddListener(EndTurn);
+        CallEndTurn.AddListener(EndTurn);
+        CallExchangeCards.AddListener(ExchangePlayersHand);
     }
 
     public void UpdatePlayersHand(Player player, Card card)
@@ -57,12 +72,8 @@ public class GameManager : MonoBehaviour
 
     private void EndTurn()
     {
-        var reseter = this.GetComponent<ResetCards>();
-        var dealer = this.GetComponent<DealCards>();
-        reseter.ResetUI();
-        
         handsChange++;
-        
+
         if (handsChange > dealer.CalculateCardsQuantity() - 1)
         {
             handsChange = 0;
@@ -72,9 +83,16 @@ public class GameManager : MonoBehaviour
             rules.CalculateRound();
             return;
         }
-        
-        List<List<Card>> handsList = players.Select(player => player.currentCardsInHand).ToList();
-        
+
+        ExchangePlayersHand();
+
+        //if last card on hand call deal cards
+    }
+
+    private void ExchangePlayersHand()
+    {
+        var handsList = players.Select(player => player.currentCardsInHand).ToList();
+
         foreach (var player in players)
         {
             player.currentCardsInHand = handsList.Last();
@@ -84,9 +102,13 @@ public class GameManager : MonoBehaviour
         foreach (var player in players)
         {
             player.cardsToPlayCount = 1;
-            dealer.ShowCardInHand(player,player.currentCardsInHand);
+            dealer.ShowCardInHand(player, player.currentCardsInHand);
         }
-        
-        //if last card on hand call deal cards
+    }
+
+    internal void ShowNextPlayerHand()
+    {
+        reseter.ResetUI();
+        dealer.ShowCardInHand(activePlayer, activePlayer.currentCardsInHand);
     }
 }

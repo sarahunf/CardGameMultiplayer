@@ -1,3 +1,4 @@
+using System.Collections;
 using CardControllers;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -8,12 +9,15 @@ namespace Interface
     {
         public void OnDrop(PointerEventData eventData)
         {
-            if (eventData.pointerDrag != null && transform.childCount < GameManager.Instance.players.Count)
+            var slotsAvailable = GameManager.Instance.activePlayer.cardsToPlayCount;
+
+            if (eventData.pointerDrag != null && transform.childCount < slotsAvailable)
             {
                 GameManager.Instance.UpdatePlayersHand(eventData.pointerDrag.GetComponentInParent<Player>(),
                     eventData.pointerDrag.GetComponent<CardDisplay>().card);
-                
                 eventData.pointerDrag.GetComponent<Transform>().SetParent(transform);
+                
+                Turn.Instance.CallNextPlayer.Invoke();
                 return;
             }
 

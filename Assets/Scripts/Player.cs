@@ -20,10 +20,10 @@ public class Player : CardsInTurn
 
     public void UpdateCards(Card card)
     {
-        cardsUsedInTurn.Add(card);
-        cardsUsedOnTable.Add(card);
-        currentCardsInHand.Remove(card);
-        lastUsedCard = card;
+        this.cardsUsedInTurn.Add(card);
+        this.cardsUsedOnTable.Add(card);
+        this.currentCardsInHand.Remove(card);
+        this.lastUsedCard = card;
 
         UpdateTurn(card);
     }
