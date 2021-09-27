@@ -13,16 +13,13 @@ namespace Interface
 
             if (eventData.pointerDrag != null && transform.childCount < slotsAvailable)
             {
-                GameManager.Instance.UpdatePlayersHand(eventData.pointerDrag.GetComponentInParent<Player>(),
-                    eventData.pointerDrag.GetComponent<CardDisplay>().card);
-                eventData.pointerDrag.GetComponent<Transform>().SetParent(transform);
+                var player = eventData.pointerDrag.GetComponentInParent<Player>();
+                var card = eventData.pointerDrag.GetComponent<CardDisplay>().card;
                 
-                Turn.Instance.CallNextPlayer.Invoke();
-                return;
+                GameManager.Instance.UpdatePlayersHand(player, card);
+                eventData.pointerDrag.GetComponent<Transform>().SetParent(transform);
+                player.btFinishTurn.interactable = true;
             }
-
-            eventData.pointerDrag.GetComponent<Transform>().position =
-                eventData.pointerDrag.GetComponent<DragDrop>().originalPos;
         }
     }
 }

@@ -8,7 +8,7 @@ public class Turn : MonoBehaviour
 {
     public static Turn Instance { get; private set; }
 
-    public UnityEvent CallNextPlayer;
+    public UnityEvent callNextPlayer;
     private bool lastPlayer;
 
     private void Awake()
@@ -25,7 +25,7 @@ public class Turn : MonoBehaviour
 
     private void Start()
     {
-        CallNextPlayer.AddListener(NextPlayerInTurn);
+        callNextPlayer.AddListener(NextPlayerInTurn);
     }
 
     private void NextPlayerInTurn()
@@ -48,7 +48,6 @@ public class Turn : MonoBehaviour
         {
             p = 0;
             lastPlayer = true;
-            Debug.Log("back to first player");
         }
         else
             p += 1;
@@ -59,9 +58,8 @@ public class Turn : MonoBehaviour
 
         if (lastPlayer)
         {
-            GameManager.Instance.CallEndTurn.Invoke();
+            GameManager.Instance.callEndTurn.Invoke();
             lastPlayer = false;
-            Debug.Log("exchanging cards");
         }
 
         GameManager.Instance.ShowNextPlayerHand();

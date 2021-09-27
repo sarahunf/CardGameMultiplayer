@@ -6,7 +6,7 @@ using UnityEngine.Events;
 
 namespace CardControllers
 {
-    public class DealCards : MonoBehaviour
+    public class DealCards : ShowCards
     {
         private int cardsToDeal;
         [SerializeField] private GameObject cardPrefab;
@@ -18,7 +18,7 @@ namespace CardControllers
 
         internal int CalculateCardsQuantity()
         {
-            cardsToDeal = GameManager.Instance.PlayersInGame switch
+            cardsToDeal = GameManager.Instance.playersInGame switch
             {
                 2 => 10,
                 3 => 9,
@@ -28,8 +28,7 @@ namespace CardControllers
             };
             return cardsToDeal;
         }
-
-        //está instanciando uma ultima carta errada sempre
+        
         private void SetHand()
         {
             CardsDeck.ShuffleDeck();
@@ -41,19 +40,20 @@ namespace CardControllers
                     player.currentCardsInHand.Add(card);
                     CardsDeck.RemoveCardFromDeck(card);
                 }
-                ShowCardInHand(player, player.currentCardsInHand);
             }
+            
+            DisplayCards(GameManager.Instance.players[0], GameManager.Instance.players[0].currentCardsInHand);
         }
 
-        public void ShowCardInHand(Player player, List<Card> hand)
+        public override void DisplayCards(Player player, List<Card> hand)
         {
+            HideCards();
             foreach (var card in hand)
             {
                 cardPrefab.GetComponent<CardDisplay>().card = card;
                 Instantiate(cardPrefab, player.transform);
             }
         }
-
         internal void Deal()
         {
             CalculateCardsQuantity();

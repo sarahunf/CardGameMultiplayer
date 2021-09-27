@@ -1,11 +1,7 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using CardControllers;
-using UnityEngine;
-using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class Player : CardsInTurn
 {
@@ -18,12 +14,22 @@ public class Player : CardsInTurn
     private bool _canUseChopstick;
     private bool _canUseWasabi;
 
+ 
+
+    private void Start()
+    {
+        btShowCardsOnHand.onClick.AddListener(ShowMyHand);
+        btShowCardsOnTable.onClick.AddListener(ShowMyTable);
+        btFinishTurn.interactable = false;
+        btFinishTurn.onClick.AddListener(FinishMyTurn);
+    }
+
     public void UpdateCards(Card card)
     {
-        this.cardsUsedInTurn.Add(card);
-        this.cardsUsedOnTable.Add(card);
-        this.currentCardsInHand.Remove(card);
-        this.lastUsedCard = card;
+        cardsUsedInTurn.Add(card);
+        cardsUsedOnTable.Add(card);
+        currentCardsInHand.Remove(card);
+        lastUsedCard = card;
 
         UpdateTurn(card);
     }
@@ -54,7 +60,7 @@ public class Player : CardsInTurn
         if (value > 1)
         {
             _canUseChopstick = true;
-            useChopstick.interactable = true;
+            btUseChopstick.interactable = true;
         }
     }
 
@@ -77,5 +83,28 @@ public class Player : CardsInTurn
     internal bool CanUseWasabi()
     {
         return _canUseWasabi;
+    }
+
+    private void FinishMyTurn()
+    {
+        Turn.Instance.callNextPlayer.Invoke();
+        btFinishTurn.interactable = false;
+    }
+
+    private void ShowMyHand()
+    {
+        GameManager.Instance.dealer.DisplayCards(this,currentCardsInHand);
+    }
+
+    private void ShowMyTable()
+    {
+        GameManager.Instance.dealer.DisplayCards(this,cardsUsedInTurn);
+    }
+
+    internal void ResetAfterTurn()
+    {
+        currentCardsInHand.Clear();
+        cardsUsedInGame.AddRange(cardsUsedInTurn);
+        cardsUsedInTurn.Clear();
     }
 }

@@ -20,4 +20,3 @@ MonoBehaviour:
   maxValue: 2
   minValue: 0
   maxQuantityInGame: 10
-  turnsInGame: 0

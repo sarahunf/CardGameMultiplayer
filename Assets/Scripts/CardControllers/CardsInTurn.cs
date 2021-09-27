@@ -12,9 +12,10 @@ namespace CardControllers
        public List<Card> cardsUsedInGame = new List<Card>();
        public List<Card> cardsUsedOnTable = new List<Card>();
        public Card lastUsedCard;
-       public Button useChopstick;
-       public Button showCardsOnHand;
-       public Button showCardsOnTable;
+       public Button btUseChopstick;
+       public Button btShowCardsOnHand;
+       public Button btShowCardsOnTable;
+       public Button btFinishTurn;
     }
 }
 

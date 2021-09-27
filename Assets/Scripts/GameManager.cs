@@ -16,16 +16,14 @@ public class GameManager : MonoBehaviour
     [SerializeField] internal Button dealButton;
     [SerializeField] internal Button resetButton;
     [SerializeField] internal Button compareButton;
-    [SerializeField] internal Button finishTurnButton;
 
-    public UnityEvent CallEndTurn;
-    public UnityEvent CallExchangeCards;
+    public UnityEvent callEndTurn;
 
     public Transform playersParent;
     public List<Player> players;
-    [SerializeField] internal int PlayersInGame;
+    [SerializeField] internal int playersInGame;
 
-    internal int round;
+    [SerializeField] internal int round;
     internal int lastRound;
     private int handsChange;
 
@@ -34,35 +32,33 @@ public class GameManager : MonoBehaviour
     internal Player activePlayer;
 
     internal ResetCards reseter;
-    private DealCards dealer;
+    internal DealCards dealer;
 
     private void Awake()
     {
         if (Instance != null && Instance != this)
         {
-            Destroy(this.gameObject);
+            Destroy(gameObject);
             return;
         }
 
         Instance = this;
-        DontDestroyOnLoad(this.gameObject);
+        DontDestroyOnLoad(gameObject);
     }
 
     private void Start()
     {
-        reseter = this.GetComponent<ResetCards>();
-        dealer = this.GetComponent<DealCards>();
+        reseter = GetComponent<ResetCards>();
+        dealer = GetComponent<DealCards>();
         var playersInScene = playersParent.GetComponentsInChildren<Player>(true);
         foreach (var player in playersInScene)
         {
             players.Add(player);
         }
 
-        PlayersInGame = players.Count;
+        playersInGame = players.Count;
         activePlayer = playersInScene[0];
-        finishTurnButton.onClick.AddListener(EndTurn);
-        CallEndTurn.AddListener(EndTurn);
-        CallExchangeCards.AddListener(ExchangePlayersHand);
+        callEndTurn.AddListener(EndTurn);
     }
 
     public void UpdatePlayersHand(Player player, Card card)
@@ -79,36 +75,38 @@ public class GameManager : MonoBehaviour
             handsChange = 0;
             reseter.Reset();
             dealer.Deal();
-            var rules = this.GetComponent<Rules>();
+            var rules = GetComponent<Rules>();
             rules.CalculateRound();
+
+            //reseting players hand
+            foreach (var player in players)
+            {
+                player.ResetAfterTurn();
+            }
+
             return;
         }
 
         ExchangePlayersHand();
-
-        //if last card on hand call deal cards
     }
 
+    //on the end of the turn card exchange goes one step further (player 1 hand goes to player 3, for ex)
+    // if more than 2 players. Problem is on Last()?
     private void ExchangePlayersHand()
     {
         var handsList = players.Select(player => player.currentCardsInHand).ToList();
-
+        
         foreach (var player in players)
         {
             player.currentCardsInHand = handsList.Last();
             handsList.RemoveAt(handsList.Count - 1);
-        }
-
-        foreach (var player in players)
-        {
             player.cardsToPlayCount = 1;
-            dealer.ShowCardInHand(player, player.currentCardsInHand);
         }
     }
 
     internal void ShowNextPlayerHand()
     {
         reseter.ResetUI();
-        dealer.ShowCardInHand(activePlayer, activePlayer.currentCardsInHand);
+        dealer.DisplayCards(activePlayer, activePlayer.currentCardsInHand);
     }
 }

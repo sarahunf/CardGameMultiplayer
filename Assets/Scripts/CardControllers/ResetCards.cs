@@ -11,6 +11,7 @@ namespace CardControllers
         {
             GameManager.Instance.resetButton.onClick.AddListener(Reset);
         }
+
         public void Reset()
         {
             //check if cards have been dealt
@@ -20,7 +21,6 @@ namespace CardControllers
 
         private void ResetLogic()
         {
-            
             var handsDealt = FindObjectsOfType<CardsInTurn>();
             foreach (var hand in handsDealt)
             {
@@ -31,10 +31,14 @@ namespace CardControllers
         internal void ResetUI()
         {
             var cardDisplay = FindObjectsOfType<CardDisplay>();
-            foreach (var card in cardDisplay)
+            if (cardDisplay != null)
             {
-                Destroy(card.gameObject);
+                foreach (var card in cardDisplay)
+                {
+                    Destroy(card.gameObject);
+                }
             }
+
         }
     }
 }

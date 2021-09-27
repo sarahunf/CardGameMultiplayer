@@ -9,12 +9,14 @@ namespace Interface
         private RectTransform rectTransform;
         private CanvasGroup canvasGroup;
         internal Vector3 originalPos;
+        public GameObject parentGO;
 
         private void Awake()
         {
             canvas = GameManager.Instance.canvas;
             rectTransform = GetComponent<RectTransform>();
             canvasGroup = GetComponent<CanvasGroup>();
+            parentGO = transform.parent.gameObject;
         }
 
         public void OnBeginDrag(PointerEventData eventData)
@@ -28,13 +30,16 @@ namespace Interface
         {
             rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;
         }
-    
+
         public void OnEndDrag(PointerEventData eventData)
         {
             canvasGroup.blocksRaycasts = true;
             canvasGroup.alpha = 1f;
+            
+            if (transform.parent == parentGO.transform)
+                transform.position = originalPos;
         }
-    
+
         public void OnPointerDown(PointerEventData eventData)
         {
         }
